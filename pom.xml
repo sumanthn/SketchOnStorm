@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>SketchOnStorm</groupId>
+    <artifactId>SketchOnStorm</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <repositories>
+    <repository>
+        <id>conjars.org</id>
+        <url>http://conjars.org/repo</url>
+    </repository>
+
+    <repository>
+        <id>github-releases</id>
+        <url>http://oss.sonatype.org/content/repositories/github-releases/</url>
+    </repository>
+
+        <!-- Using latest since there are fixes wrt to StreamSummary -->
+    <repository>
+        <id>AddThis</id>
+        <url>https://github.com/addthis/stream-lib</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+    </repositories>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.storm</groupId>
+            <artifactId>storm-core</artifactId>
+            <version>0.9.1-incubating</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.clearspring.analytics</groupId>
+            <artifactId>stream</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+
+
+
+</project>
