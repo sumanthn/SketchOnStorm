@@ -7,5 +7,5 @@ public class Globals {
 
 
     public static final long INVALID_CARDINALITY = -1L;
-
+    public static final String EMPTY_RESULT = "[]";
 }

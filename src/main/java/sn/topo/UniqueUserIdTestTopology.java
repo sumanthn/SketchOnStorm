@@ -37,22 +37,18 @@ public class UniqueUserIdTestTopology extends AbstractTopology {
 
         StateFactory mapState = new MemoryMapState.Factory();
 
-
-
         TridentState counterState = topology.newStream("CounterGen", dataGen)
                 .groupBy(new Fields(Names.TIME_STAMP_FLD))
                 .persistentAggregate(mapState, new Fields(Names.USER_ID_FLD),
                         new HLLBasedCombiner(Names.USER_ID_FLD),
                         new Fields("ItemCounter"));
 
-
-
-        topology.newDRPCStream( "CountItemStream", localDRPC )
+        topology.newDRPCStream("CountItemStream", localDRPC)
 
                 .each(new Fields("args"), new Split(), new Fields("FLD"))
-                .each(new Fields("FLD"), new DataTypeConvert(new Integer(1)), new Fields(Names.USER_ID_FLD))
-                .each(new Fields(Names.USER_ID_FLD), new Debug())
-                .stateQuery(counterState, new Fields(Names.USER_ID_FLD), new MapGet(), new Fields(Names.COUNTER_VALS_FLD))
+                .each(new Fields("FLD"), new DataTypeConvert(new Integer(1)), new Fields(Names.MIN_OF_DAY_FLD))
+                .each(new Fields(Names.MIN_OF_DAY_FLD), new Debug())
+                .stateQuery(counterState, new Fields(Names.MIN_OF_DAY_FLD), new MapGet(), new Fields(Names.COUNTER_VALS_FLD))
                 .each(new Fields(Names.COUNTER_VALS_FLD), new FilterNull())
 
                         //.each(new Fields("CounterVals"), new HLLToStrConverter("CounterVals"), new Fields("UniqueItems"));
@@ -62,17 +58,14 @@ public class UniqueUserIdTestTopology extends AbstractTopology {
         return topology.build();
     }
 
-
-    public void kickStart(){
-        localDRPC= new LocalDRPC();
-
+    public void kickStart() {
+        localDRPC = new LocalDRPC();
 
         localCluster = new LocalCluster();
 
         Config conf = new Config();
         //conf.setDebug(true);
-        conf.setMaxSpoutPending( 20 );
-
+        conf.setMaxSpoutPending(20);
 
         localCluster.submitTopology("CounterTopo", conf, buildTopology());
 
@@ -81,40 +74,28 @@ public class UniqueUserIdTestTopology extends AbstractTopology {
         Utils.sleep(6 * 1000);
         dateTime.minusSeconds(1);
         int groupById = 10;
-        for(int i=0;i < 20;i++){
-
-
+        for (int i = 0; i < 20; i++) {
 
             System.out.println("Querying with key " + groupById);
-            String rtnVals =  localDRPC.execute("CountItemStream" ,String.valueOf(groupById));
-            System.out.println("Returned str is " +  rtnVals);
+            String rtnVals = localDRPC.execute("CountItemStream", String.valueOf(groupById));
+            System.out.println("Returned str is " + rtnVals);
 
             try {
-                HyperLogLog hll =HyperLogLog.Builder.build(Base64.decodeBase64(rtnVals));
+                HyperLogLog hll = HyperLogLog.Builder.build(Base64.decodeBase64(rtnVals));
                 System.out.println("unique items for string " + hll.cardinality());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            Utils.sleep(5*1000);
-
+            Utils.sleep(5 * 1000);
         }
 
-
         shutdown();
-
-
-
     }
 
-    public static void main(String [] args){
+    public static void main(String[] args) {
 
         UniqueUserIdTestTopology topo = new UniqueUserIdTestTopology();
         topo.kickStart();
-
-
     }
-
-
-
 }

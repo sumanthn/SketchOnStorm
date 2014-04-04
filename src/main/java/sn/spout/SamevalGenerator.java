@@ -34,8 +34,8 @@ public class SamevalGenerator implements IBatchSpout {
 
 
         collector.emit(new Values(Integer.valueOf(10), Integer.valueOf(startIdx)));
-        //startIdx++;
-       // collector.emit(new Values(Integer.valueOf(10), Integer.valueOf(startIdx)));
+        startIdx++;
+        // collector.emit(new Values(Integer.valueOf(10), Integer.valueOf(startIdx)));
         Utils.sleep(TimeMeasures.ONESECOND_MILLIS);
     }
 
