@@ -1,4 +1,4 @@
-package sn.utils;
+package sn.runner;
 
 import backtype.storm.utils.Utils;
 import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import sn.query.UserIdQueryHandler;
 import sn.topo.StormClusterStore;
 import sn.topo.UniqueUserCounterTopologyBuilder;
+import sn.utils.TimeMeasures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,10 @@ import java.util.List;
 /**
  * Created by sumanthn on 3/4/14.
  */
-public class Runner {
-
+public class UserIdCounterRunner {
 
     //duration for how many minutes in past
-    static final long getUniqueUserCount(int startMin, int duration){
+    static long getUniqueUserCount(int startMin, int duration) {
         List<HyperLogLog> sketches = new ArrayList<HyperLogLog>();
         HyperLogLog finalCounter = new HyperLogLog(16);
 
@@ -26,21 +26,21 @@ public class Runner {
 
         //get for 5 mins
         //get all HLL Sketches for last 5 mins
-       while(duration!=0){
+        while (duration != 0) {
 
-           System.out.println("Find for duration " + curMinofDay);
+            System.out.println("Find for duration " + curMinofDay);
             HyperLogLog sketch = UserIdQueryHandler.getInstance().fetchSketchForMin(curMinofDay);
             //can directly merge with final counter
             //just in case merge exception occurs , we need to retry only with few sets
-            if (sketch!=null)
+            if (sketch != null)
                 sketches.add(sketch);
 
             curMinofDay--;
             duration--;
         }
 
-        for(HyperLogLog hll : sketches){
-            System.out.println("Merging hll of cardinality " +  hll.cardinality());
+        for (HyperLogLog hll : sketches) {
+            System.out.println("Merging hll of cardinality " + hll.cardinality());
             try {
                 finalCounter = (HyperLogLog) finalCounter.merge(hll);
                 System.out.println("Cardinality now is " + finalCounter.cardinality());
@@ -49,14 +49,12 @@ public class Runner {
             }
         }
 
-
-
         //finalCounter.merge()
 
         return finalCounter.cardinality();
-
     }
-    public static void main(String [] args){
+
+    public static void main(String[] args) {
         StormClusterStore clusterStore = StormClusterStore.getInstance();
         clusterStore.init();
 
@@ -67,14 +65,10 @@ public class Runner {
         //spin off the query manage
         UserIdQueryHandler.getInstance().init();
 
-        Utils.sleep((4*TimeMeasures.ONEMIN_MILLIS)+10);
+        Utils.sleep((4 * TimeMeasures.ONEMIN_MILLIS) + 10);
         //launch  query
 
-
-
-        long count =getUniqueUserCount(DateTime.now().getMinuteOfDay()-1,3);
+        long count = getUniqueUserCount(DateTime.now().getMinuteOfDay() - 1, 3);
         System.out.println("unique is " + count);
-
-
     }
 }

@@ -1,4 +1,4 @@
-package sn.topo;
+package sn.runner.test;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -10,9 +10,10 @@ import com.clearspring.analytics.stream.cardinality.HyperLogLog;
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import sn.customtypes.DataTypeConvert;
-import sn.customtypes.HLLBasedCombiner;
+import sn.customtypes.HLLAggregator;
 import sn.customtypes.HLLToStrConverter;
 import sn.spout.SamevalGenerator;
+import sn.topo.AbstractTopology;
 import sn.utils.Names;
 import storm.trident.TridentState;
 import storm.trident.TridentTopology;
@@ -40,7 +41,7 @@ public class UniqueUserIdTestTopology extends AbstractTopology {
         TridentState counterState = topology.newStream("CounterGen", dataGen)
                 .groupBy(new Fields(Names.TIME_STAMP_FLD))
                 .persistentAggregate(mapState, new Fields(Names.USER_ID_FLD),
-                        new HLLBasedCombiner(Names.USER_ID_FLD),
+                        new HLLAggregator(Names.USER_ID_FLD),
                         new Fields("ItemCounter"));
 
         topology.newDRPCStream("CountItemStream", localDRPC)

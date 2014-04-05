@@ -12,9 +12,11 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
+ * Converts HLL to bytes to Binary64 Encoded String
+ * DRPC returns back only string
  * Created by sumanthn on 2/4/14.
  */
-public class HLLToStrConverter   implements Function {
+public class HLLToStrConverter implements Function {
 
     private final String fieldName;
 
@@ -27,20 +29,12 @@ public class HLLToStrConverter   implements Function {
         HyperLogLog hyperLogLog = (HyperLogLog) tuple.getValueByField(fieldName);
 
         try {
-            byte [] hllBytes = hyperLogLog.getBytes();
+            byte[] hllBytes = hyperLogLog.getBytes();
             String hllStr = Base64.encodeBase64String(hllBytes);
             collector.emit(new Values(hllStr));
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-     /*   if (hyperLogLog!=null)
-            collector.emit(new Values(hyperLogLog.cardinality()));
-        else
-            collector.emit(new Values(0));*/
-
-
     }
 
     @Override
