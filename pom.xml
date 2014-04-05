@@ -9,24 +9,24 @@
     <version>1.0-SNAPSHOT</version>
 
     <repositories>
-    <repository>
-        <id>conjars.org</id>
-        <url>http://conjars.org/repo</url>
-    </repository>
+        <repository>
+            <id>conjars.org</id>
+            <url>http://conjars.org/repo</url>
+        </repository>
 
-    <repository>
-        <id>github-releases</id>
-        <url>http://oss.sonatype.org/content/repositories/github-releases/</url>
-    </repository>
+        <repository>
+            <id>github-releases</id>
+            <url>http://oss.sonatype.org/content/repositories/github-releases/</url>
+        </repository>
 
         <!-- Using latest since there are fixes wrt to StreamSummary -->
-    <repository>
-        <id>AddThis</id>
-        <url>https://github.com/addthis/stream-lib</url>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </repository>
+        <repository>
+            <id>AddThis</id>
+            <url>https://github.com/addthis/stream-lib</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
 
@@ -63,7 +63,6 @@
         </dependency>
 
 
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -71,9 +70,15 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- currently used only in testing -->
+        <dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+            <version>3.0.3</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
-
-
 
 
 </project>
