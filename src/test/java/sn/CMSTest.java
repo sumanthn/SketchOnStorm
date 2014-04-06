@@ -279,18 +279,6 @@ public class CMSTest {
         return cmsCounter;
     }
 
-    @Test
-    public void testTrove() {
-        TIntLongHashMap intMap = new TIntLongHashMap();
-        intMap.put(1, 10);
-        intMap.put(2, 20);
-        intMap.put(3, 30);
-
-        intMap.adjustOrPutValue(1, 40, 300);
-
-        System.out.println(intMap.get(1));
-    }
-
     class Item {
 
         int id;

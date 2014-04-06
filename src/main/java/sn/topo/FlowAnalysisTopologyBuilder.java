@@ -32,7 +32,7 @@ public class FlowAnalysisTopologyBuilder {
     }
 
     /**
-     * Builds the topology for Unique UserId Counter
+     * Builds the topology for Ip Flow Analysis
      */
     public static final StormTopology buildTopology() {
 

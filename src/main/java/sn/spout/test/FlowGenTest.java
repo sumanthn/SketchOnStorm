@@ -1,4 +1,4 @@
-package sn.spout;
+package sn.spout.test;
 
 import backtype.storm.Config;
 import backtype.storm.task.TopologyContext;

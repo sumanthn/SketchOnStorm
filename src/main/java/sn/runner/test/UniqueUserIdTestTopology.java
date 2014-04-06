@@ -12,7 +12,7 @@ import org.joda.time.DateTime;
 import sn.customtypes.DataTypeConvert;
 import sn.customtypes.HLLAggregator;
 import sn.customtypes.HLLToStrConverter;
-import sn.spout.SamevalGenerator;
+import sn.spout.test.SamevalGenerator;
 import sn.topo.AbstractTopology;
 import sn.utils.Names;
 import storm.trident.TridentState;

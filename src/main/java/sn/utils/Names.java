@@ -27,9 +27,16 @@ public class Names {
     public static final String MIN_OF_DAY_FLD = "mod";
     public static final String HOUR_0F_DAY_FLD = "hod";
 
+    public static final String DAY_0F_YEAR_FLD = "doy";
+
     public static final String TIME_STAMP_FLD = "TimeStamp";
     public static final String MIN_TIMESTAMP_FLD = "MinTS";
 
     /* used in DRPC request*/
     public static final String ARGS_FLD = "args";
+
+    public static final String HOSTNAME_FLD = "HostName";
+    public static final String DATA_VOLUME_FLD = "DataVolume";
+
+    public static final String DATA_VOLUME_SKETCH_FLD = "DataVolumeSketch";
 }

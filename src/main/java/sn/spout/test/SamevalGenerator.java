@@ -1,4 +1,4 @@
-package sn.spout;
+package sn.spout.test;
 
 import backtype.storm.Config;
 import backtype.storm.task.TopologyContext;
@@ -19,11 +19,11 @@ import java.util.Map;
  */
 public class SamevalGenerator implements IBatchSpout {
 
-
     int startIdx = 1000;
     static int groupById = 10;
 
-    Fields fields =  new Fields(Names.TIME_STAMP_FLD, Names.USER_ID_FLD);
+    Fields fields = new Fields(Names.TIME_STAMP_FLD, Names.USER_ID_FLD);
+
     @Override
     public void open(Map map, TopologyContext topologyContext) {
 
@@ -31,7 +31,6 @@ public class SamevalGenerator implements IBatchSpout {
 
     @Override
     public void emitBatch(long l, TridentCollector collector) {
-
 
         collector.emit(new Values(Integer.valueOf(10), Integer.valueOf(startIdx)));
         startIdx++;
