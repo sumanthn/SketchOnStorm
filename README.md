@@ -51,3 +51,7 @@ _sn.customtypes.DataVolumeAggregator_--> aggregates the volume per host based on
 _sn.runner.UserIdCounterRunner_ --> Queries for the unique users minutely
 _sn.runner.FlowAnalyzer_--> Queries for the unique conversations minutely & hourly
 _sn.ruuner.DataVolumeTracker_ --> Queries for the heavy hitters minutely for a given hour
+
+TODO:
+Persistent state store using MapDB
+Handle batch failures
