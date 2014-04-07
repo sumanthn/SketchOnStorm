@@ -62,7 +62,7 @@ public class HostTrafficGenerator extends AbstractDataGenerator {
                         //host ip which generate traffic
                         hostNameRepo.getHostNameKeys().get(randomGen.nextInt(hostNameRepo.getHostNameKeys().size())),
                         //bytes generated
-                        Long.valueOf(Math.abs(randomGen.nextInt(Integer.MAX_VALUE / 2) + randomGen.nextInt(Integer.MAX_VALUE / 2))),//BYTES
+                        Long.valueOf(randomGen.nextInt(2020) + randomGen.nextInt(6732)),//BYTES
                         now.getHourOfDay(), //Hod
                         now.getDayOfYear() //Doy
                 ));
@@ -76,7 +76,7 @@ public class HostTrafficGenerator extends AbstractDataGenerator {
                         now.getDayOfYear() //Doy
                 ));
             }
-        }
+        }//end batch
 
         Utils.sleep(emitFrequency);
     }

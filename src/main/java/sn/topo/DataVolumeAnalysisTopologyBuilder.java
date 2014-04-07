@@ -20,7 +20,8 @@ import storm.trident.testing.Split;
 
 /**
  * Builds the Stream, State for computing
- * the data transmitted by a host
+ * the data transmitted by a host/server
+ * Aggregates the volumes by Hourly using CountMinSketch
  * Created by sumanthn on 5/4/14.
  */
 public class DataVolumeAnalysisTopologyBuilder {
@@ -50,19 +51,18 @@ public class DataVolumeAnalysisTopologyBuilder {
         //here it is simple HashMap backed in memory store
         StateFactory dataVolumeMapStore = new MemoryMapState.Factory();
 
-        //define the counter state
-        //use HLL as sketch to keep track of unique userids
+        //define the stream
         Stream hostTrafficStream = topology
                 .newStream(STREAM_NAME, dataGen)
                 .parallelismHint(1);
 
+        //define the state
         TridentState counterState =
 
                 hostTrafficStream
-                        //group by minutely bucket
+                        //group by hourly bucket
                         .groupBy(new Fields(Names.HOUR_0F_DAY_FLD))
-                                //store the HLL based sketch for every minute
-                                //this should give the unique user id count
+                                //aggregate by host
                         .persistentAggregate(dataVolumeMapStore, new Fields(Names.HOSTNAME_FLD, Names.BYTES_FLD),
                                 new DataVolumeAggregator(),
                                 new Fields("DataVolumes"));
@@ -72,7 +72,7 @@ public class DataVolumeAnalysisTopologyBuilder {
         //attach to local instance of DRPC
         topology.newDRPCStream(DATA_VOLUME_BY_HOSTS, StormClusterStore.getInstance().getLocalDRPC())
 
-                //takes in string args the minute of day (bucket used for unique counts)
+                //takes in string args the hour of day (bucket used for unique counts)
                 .each(new Fields(Names.ARGS_FLD), new Split(), new Fields("FLD"))
                         //MIN_OF_DAY_FLD is the key for the map
                 .each(new Fields("FLD"), new DataTypeConvert(new Integer(1)),

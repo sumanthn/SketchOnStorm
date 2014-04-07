@@ -64,7 +64,9 @@ public class HLLTest {
         try {
             ICardinality hllMerged = hll.merge(hll2);
             hllMerged = hllMerged.merge(hll3);
-            System.out.println(hllMerged.cardinality());
+//            System.out.println(hllMerged.cardinality());
+
+            assertEquals(hllMerged.cardinality(), 20);
         } catch (CardinalityMergeException e) {
             e.printStackTrace();
         }

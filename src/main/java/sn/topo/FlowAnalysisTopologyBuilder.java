@@ -18,6 +18,9 @@ import storm.trident.testing.MemoryMapState;
 import storm.trident.testing.Split;
 
 /**
+ * Build topology for tracking the conversations of a traffic flow
+ * Aggregates minutely keeping track of Unique Conversation and all conversation counts
+ * using HyperLogLog
  * Created by sumanthn on 4/4/14.
  */
 public class FlowAnalysisTopologyBuilder {
@@ -41,40 +44,32 @@ public class FlowAnalysisTopologyBuilder {
 
         //bring in the spout
         FlowGenerator dataGen = new FlowGenerator();
-
-        // FlowGenTest dataGen = new FlowGenTest();
-
         //attach the state factory
         //here it is simple HashMap backed in memory store
         StateFactory mapState = new MemoryMapState.Factory();
         StateFactory conversationMapState = new MemoryMapState.Factory();
 
-        //define the counter state
-        //use HLL as sketch to keep track of unique userids
+        //the stream
         Stream ipFlowStream = topology
                 .newStream(STREAM_NAME, dataGen)
                 .parallelismHint(4);
 
+        //define the counter state
         TridentState counterState =
 
                 ipFlowStream
                         //group by minutely bucket
                         .groupBy(new Fields(Names.MIN_OF_DAY_FLD))
-                                //store the HLL based sketch for every minute
-                                //this should give the unique user id count
+                                //Source + IP DEST fld makes a conversation
                         .persistentAggregate(mapState, new Fields(Names.SOURCE_IP_FLD, Names.DEST_IP_FLD),
                                 new IpConversationSketch(),
                                 new Fields("ConversationsCount"));
 
+        //track al conversations count
         TridentState globalCountPerMin =
                 ipFlowStream
-                        //topology.newStream(STREAM_NAME2, dataGen)
-                        .parallelismHint(4)
-
-                                //group by minutely bucket
+                        //group by minutely bucket
                         .groupBy(new Fields(Names.MIN_OF_DAY_FLD))
-                                //store the HLL based sketch for every minute
-                                //this should give the unique user id count
                         .persistentAggregate(conversationMapState, new Fields(Names.MIN_OF_DAY_FLD),
                                 new Count(),
                                 new Fields("ConversationCountPerMin"));

@@ -28,7 +28,7 @@ public class StreamSummaryTest {
         List<Counter<Integer>> topK = vs.topK(fetchTopK);
         for (Counter<Integer> c : topK) {
 
-            System.out.println(c.toString());
+            //    System.out.println(c.toString());
         }
     }
 
@@ -42,7 +42,7 @@ public class StreamSummaryTest {
         List<Counter<String>> topK = vs.topK(3);
         for (Counter<String> c : topK) {
             // assertTrue(Arrays.asList("A", "C", "X").contains(c.getItem()));
-            System.out.println(c.toString());
+            //  System.out.println(c.toString());
         }
     }
 }
